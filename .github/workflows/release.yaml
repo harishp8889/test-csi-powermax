@@ -10,5 +10,5 @@ on:
         required: true
 jobs:
   csm-release:
-    uses: dell/common-github-actions/.github/workflows/csm-release-driver-module.yaml@feature/driver-automation
+    uses: harishp8889/test-common-github-actions/.github/workflows/csm-release-driver-module.yaml@main
     name: Release CSM Drivers and Modules
