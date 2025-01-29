@@ -20,15 +20,26 @@ on:  # yamllint disable-line rule:truthy
           default: false
           required: false
 jobs:
+  process-images-input:
+    name: Process inputs
+    runs-on: ubuntu-latest
+    outputs:
+      images: ${{ steps.process-images-input.outputs.images }}
+    steps:
+      - name: Process images input
+        id: process-images-input        
+        run: |
+          # by default we will release only csi-powermax image, if the user selects reverse-proxy then we will release that as well.
+          IMAGES="csi-powermax"
+          if [ "${{ github.event.inputs.reverseproxyCheckInput }}" == "true" ]; then
+            IMAGES="csi-powermax,csi-reverseproxy"
+          fi
+          echo "images=$IMAGES" >> $GITHUB_OUTPUT
   csm-release:
     uses: harishp8889/test-common-github-actions/.github/workflows/csm-release-driver-module.yaml@main
     name: Release CSM Drivers and Modules
     with:
       version: ${{ github.event.inputs.option }}
-      images: |
-        {% if github.event.inputs.reverseproxyCheckInput == 'true' %}
-          csi-powermax,csi-reverseproxy
-        {% else %}
-          csi-powermax
-        {% endif %}
+      images: ${{ needs.process-images-input.outputs.images }}
+        
     secrets: inherit
