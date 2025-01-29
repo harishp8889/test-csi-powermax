@@ -20,11 +20,11 @@ on:  # yamllint disable-line rule:truthy
           default: false
           required: false
 jobs:
-  process-images-input:
-    name: Process inputs
+  process-input:
+    name: Process images inputs
     runs-on: ubuntu-latest
     outputs:
-      images: ${{ steps.process-images-input.outputs.images }}
+      images: ${{ steps.process-input.outputs.images }}
     steps:
       - name: Process images input
         id: process-images-input        
@@ -40,6 +40,6 @@ jobs:
     name: Release CSM Drivers and Modules
     with:
       version: ${{ github.event.inputs.option }}
-      images: ${{ needs.process-images-input.outputs.images }}
+      images: ${{ needs.process-input.outputs.images }}
         
     secrets: inherit
