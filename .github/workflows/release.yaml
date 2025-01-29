@@ -14,8 +14,8 @@ on:  # yamllint disable-line rule:truthy
           - major
           - minor
           - patch
-      checkbox_input:
-          description: 'CSI-ReverseProxy'
+      reverseproxyCheckInput:
+          description: 'Release CSI-ReverseProxy Image'
           type: boolean
           default: false
           required: false
@@ -25,5 +25,10 @@ jobs:
     name: Release CSM Drivers and Modules
     with:
       version: ${{ github.event.inputs.option }}
-      images: ${{ github.event.inputs.checkbox_input }}
+      images: |
+        {% if github.event.inputs.reverseproxyCheckInput == 'true' %}
+          csi-powermax,csi-reverseproxy
+        {% else %}
+          csi-powermax
+        {% endif %}
     secrets: inherit
