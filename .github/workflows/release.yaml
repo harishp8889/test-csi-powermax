@@ -24,22 +24,22 @@ jobs:
     name: Process images inputs
     runs-on: ubuntu-latest
     outputs:
-      images: ${{ steps.process-input.outputs.images }}
+      images: ${{ steps.process-input.outputs.imagelist }}
     steps:
       - name: Process images input
-        id: process-images-input        
+        id: process-images-input
         run: |
           # by default we will release only csi-powermax image, if the user selects reverse-proxy then we will release that as well.
           IMAGES="csi-powermax"
           if [ "${{ github.event.inputs.reverseproxyCheckInput }}" == "true" ]; then
             IMAGES="csi-powermax,csi-reverseproxy"
           fi
-          echo "images=$IMAGES" >> $GITHUB_OUTPUT
+          echo "imagelist=$IMAGES" >> $GITHUB_OUTPUT
   csm-release:
     uses: harishp8889/test-common-github-actions/.github/workflows/csm-release-driver-module.yaml@main
+    needs: process-input
     name: Release CSM Drivers and Modules
     with:
       version: ${{ github.event.inputs.option }}
-      images: ${{ needs.process-input.outputs.images }}
-        
+      images: ${{ needs.process-input.outputs.images }}    
     secrets: inherit
