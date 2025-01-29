@@ -41,6 +41,6 @@ jobs:
     name: Release CSM Drivers and Modules
     with:
       version: ${{ github.event.inputs.option }}
-      images: ${{ github.event.inputs.reverseproxyCheckInput == true && 'csi-powermax,csi-reverseproxy' || 'csi-powermax' }}
+      images: ${{ github.event.inputs.reverseproxyCheckInput == 'true' && 'csi-powermax,csi-reverseproxy' || 'csi-powermax' }}
 
     secrets: inherit
